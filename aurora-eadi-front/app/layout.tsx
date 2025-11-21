@@ -1,38 +1,24 @@
 'use client'
 
-import React, { useState } from 'react';
-import { AuthProvider, useAuthContext } from '@/context/AuthContext';
-import { Layout } from '../components/layout/Layout';
-import { Login } from '../components/pages/Login';
-import { Register } from '../components/pages/Register';
-import { SupplierDashboard } from '../components/pages/supplier/Dashboard';
-import { AdminDashboard } from '../components/pages/admin/Dashboard';
-import { UserRole } from '../types';
+import './globals.css'
+import { QueryClientProvider } from '@tanstack/react-query'
+import { queryClient } from '@/lib/react-query'
+import { AuthProvider } from '@/context/AuthContext'
 
-const MainContent: React.FC = () => {
-  const { currentUser } = useAuthContext();
-  const [view, setView] = useState<'login' | 'register'>('login');
-
-  // If not logged in, show Auth Pages
-  if (!currentUser) {
-    if (view === 'register') return <Register setView={setView} />;
-    return <Login setView={setView} />;
-  }
-
-  // Logged in Routing
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   return (
-    <Layout>
-      {currentUser.role === UserRole.ADMIN ? <AdminDashboard /> : <SupplierDashboard />}
-    </Layout>
-  );
-};
-
-const App: React.FC = () => {
-  return (
-    <AuthProvider>
-      <MainContent />
-    </AuthProvider>
-  );
-};
-
-export default App;
+    <html lang="pt-BR">
+      <body>
+        <QueryClientProvider client={queryClient}>
+          <AuthProvider>
+            {children}
+          </AuthProvider>
+        </QueryClientProvider>
+      </body>
+    </html>
+  )
+}

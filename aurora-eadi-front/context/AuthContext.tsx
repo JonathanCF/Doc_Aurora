@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { User } from '../types';
 
 interface AuthContextType {
@@ -11,28 +11,44 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState<User | null>(() => {
-    // Persistência simples da sessão
-    const saved = localStorage.getItem('auth_session');
-    return saved ? JSON.parse(saved) : null;
-  });
+  // Inicializa como null para evitar problemas de hidratação
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  // Carrega o usuário do localStorage apenas no cliente (useEffect)
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('auth_session');
+      if (saved) {
+        setCurrentUser(JSON.parse(saved));
+      }
+    } catch (error) {
+      console.error('Error loading auth session:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
 
   const loginUser = (user: User) => {
     setCurrentUser(user);
-    localStorage.setItem('auth_session', JSON.stringify(user));
+    try {
+      localStorage.setItem('auth_session', JSON.stringify(user));
+    } catch (error) {
+      console.error('Error saving auth session:', error);
+    }
   };
 
   const logoutUser = () => {
     setCurrentUser(null);
-    localStorage.removeItem('auth_session');
-    // Opcional: Limpar cache do React Query
-    // queryClient.clear(); 
+    try {
+      localStorage.removeItem('auth_session');
+    } catch (error) {
+      console.error('Error removing auth session:', error);
+    }
   };
 
   return (
-    <AuthContext.Provider value={{ currentUser, loginUser, logoutUser, isLoading  }}>
+    <AuthContext.Provider value={{ currentUser, loginUser, logoutUser, isLoading }}>
       {children}
     </AuthContext.Provider>
   );

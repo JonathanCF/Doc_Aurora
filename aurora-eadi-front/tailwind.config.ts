@@ -21,6 +21,16 @@ const config: Config = {
           800: '#9a3412',
           900: '#7c2d12',
         }
+      },
+      animation: {
+        'spin': 'spin 1s linear infinite',
+        'in': 'fadeIn 0.5s ease-in-out',
+      },
+      keyframes: {
+        fadeIn: {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        }
       }
     },
   },
