@@ -24,14 +24,11 @@ export const AdminDashboard: React.FC = () => {
   const [rejectingDoc, setRejectingDoc] = useState<Document | null>(null);
   const [rejectionReason, setRejectionReason] = useState('');
 
-  // --- Derived State & Helpers ---
-
-  // 1. Statistics
   const pendingCompanies = suppliers.filter(s => s.company.status === CompanyStatus.PENDING).length;
   const activeCompanies = suppliers.filter(s => s.company.status === CompanyStatus.ACTIVE).length;
   const totalCompanies = suppliers.length;
 
-  // 2. Filter Suppliers
+
   const filteredSuppliers = suppliers.filter(({ company, responsible }) => {
     const term = searchTerm.toLowerCase();
     return (
@@ -41,7 +38,7 @@ export const AdminDashboard: React.FC = () => {
     );
   });
 
-  // 3. Get Data for Selected Modal
+
   const selectedData = selectedSupplierId 
     ? suppliers.find(s => s.company.id === selectedSupplierId)
     : null;
@@ -50,14 +47,12 @@ export const AdminDashboard: React.FC = () => {
     ? documents.filter(d => d.companyId === selectedSupplierId)
     : [];
 
-  // 4. Calculate Document Status for Table
+
   const getDocStats = (companyId: string) => {
     const docs = documents.filter(d => d.companyId === companyId);
     const pending = docs.filter(d => d.status === DocumentStatus.PENDING).length;
     return { total: docs.length, pending, hasPending: pending > 0 };
   };
-
-  // --- Handlers ---
 
   const handleApprove = (doc: Document) => {
     if (window.confirm(`Aprovar documento "${doc.name}"?`)) {

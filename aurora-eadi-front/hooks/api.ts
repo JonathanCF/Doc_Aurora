@@ -1,17 +1,5 @@
 import { User, Company, Document, UserRole, DocumentStatus, CompanyStatus, CreateCompanyDTO, CreateUserDTO } from '../types';
 
-/**
- * SERVICE LAYER - PREPARED FOR AXIOS
- * 
- * Quando você tiver um backend real, você irá substituir a lógica interna
- * dessas funções por chamadas `axios`.
- * 
- * Exemplo:
- * import axios from 'axios';
- * const apiClient = axios.create({ baseURL: 'http://localhost:3000/api' });
- */
-
-// --- MOCK DATABASE HELPERS (Para funcionar sem Backend) ---
 const DELAY_MS = 600;
 const DB_KEYS = {
   USERS: 'docflow_users',

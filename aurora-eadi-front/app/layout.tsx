@@ -1,9 +1,11 @@
-'use client'
-
+// Remova o 'use client' daqui!
 import './globals.css'
-import { QueryClientProvider } from '@tanstack/react-query'
-import { queryClient } from '@/lib/react-query'
-import { AuthProvider } from '@/context/AuthContext'
+import { Providers } from '../app/providers' // Importe o arquivo que criamos
+
+export const metadata = {
+  title: 'Sua App',
+  description: 'Descrição da app',
+}
 
 export default function RootLayout({
   children,
@@ -12,12 +14,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-BR">
-      <body>
-        <QueryClientProvider client={queryClient}>
-          <AuthProvider>
-            {children}
-          </AuthProvider>
-        </QueryClientProvider>
+      {/* Dica Extra: Adicione suppressHydrationWarning no body 
+         caso alguma extensão insira classes aqui. 
+      */}
+      <body suppressHydrationWarning={true}>
+        <Providers>
+          {children}
+        </Providers>
       </body>
     </html>
   )

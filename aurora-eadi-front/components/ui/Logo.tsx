@@ -16,7 +16,7 @@ export const Logo: React.FC<LogoProps> = ({ className = '', size = 'md' }) => {
 
   return (
     <svg 
-      viewBox="0 0 380 100" 
+      viewBox="0 0 400 100" 
       fill="none" 
       xmlns="http://www.w3.org/2000/svg"
       className={`${sizeClasses[size]} w-auto ${className}`}
